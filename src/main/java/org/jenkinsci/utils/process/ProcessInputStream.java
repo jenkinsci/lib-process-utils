@@ -47,6 +47,32 @@ public class ProcessInputStream extends InputStream {
         return base.read(b, off, len);
     }
 
+    /**
+     * Read to the end of line - includes new line in the output.
+     */
+    public String readLine() throws IOException{
+        int c = base.read();
+        if(c < 0){
+            return null;
+        }
+        StringBuilder line = new StringBuilder();
+        while(c != -1){
+            line.append(c);
+            if(c==10){
+                break;
+            }
+            c = base.read();
+        }
+        return line.toString();
+    }
+
+    /**
+     * Gives underlying {@link Process}
+     */
+    public Process getProcess(){
+        return process;
+    }
+
     @Override
     public long skip(long n) throws IOException {
         return base.skip(n);
