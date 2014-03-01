@@ -4,13 +4,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
 import java.lang.ProcessBuilder.Redirect;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.Set;
 import java.util.logging.Logger;
 
 /**
@@ -34,6 +29,7 @@ import java.util.logging.Logger;
  */
 public class CommandBuilder implements Serializable, Cloneable {
     private final List<String> args = new ArrayList<String>();
+    public final Map<String,String> env = new HashMap<>();
 
     private File pwd;
 
@@ -60,6 +56,7 @@ public class CommandBuilder implements Serializable, Cloneable {
      */
     public int system() throws IOException, InterruptedException {
         ProcessBuilder pb = build();
+        pb.environment().putAll(Collections.unmodifiableMap(env));
         pb.redirectOutput(Redirect.INHERIT);
         pb.redirectError(Redirect.INHERIT);
         pb.redirectInput(Redirect.INHERIT);
