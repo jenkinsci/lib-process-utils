@@ -147,6 +147,12 @@ public class CommandBuilder implements Serializable, Cloneable {
         return this;
     }
 
+    public CommandBuilder add(CommandBuilder cmds) {
+        if (cmds!=null)
+            addAll(cmds.args);
+        return this;
+    }
+
     public CommandBuilder addAll(Collection<String> args) {
         if (args!=null) {
             for (String arg : args) {
