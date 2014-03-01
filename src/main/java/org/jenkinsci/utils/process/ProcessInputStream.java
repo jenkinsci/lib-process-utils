@@ -2,10 +2,7 @@ package org.jenkinsci.utils.process;
 
 import org.apache.commons.io.IOUtils;
 
-import java.io.FilterInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InterruptedIOException;
+import java.io.*;
 
 /**
  * Represents a reader end of the pipe to a running process.
@@ -47,23 +44,8 @@ public class ProcessInputStream extends InputStream {
         return base.read(b, off, len);
     }
 
-    /**
-     * Read to the end of line - includes new line in the output.
-     */
-    public String readLine() throws IOException{
-        int c = base.read();
-        if(c < 0){
-            return null;
-        }
-        StringBuilder line = new StringBuilder();
-        while(c != -1){
-            line.append(c);
-            if(c==10){
-                break;
-            }
-            c = base.read();
-        }
-        return line.toString();
+    public InputStream getInputStream(){
+        return base;
     }
 
     /**
