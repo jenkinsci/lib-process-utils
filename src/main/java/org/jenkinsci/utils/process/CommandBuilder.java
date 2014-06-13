@@ -4,8 +4,15 @@ import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
 import java.lang.ProcessBuilder.Redirect;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 import java.util.logging.Logger;
 
 /**
@@ -71,6 +78,7 @@ public class CommandBuilder implements Serializable, Cloneable {
      */
     public ProcessInputStream popen() throws IOException {
         ProcessBuilder pb = build();
+        pb.environment().putAll(Collections.unmodifiableMap(env));
         pb.redirectErrorStream(true);
         LOGGER.fine("Executing: " + toStringWithQuote());
         Process p = pb.start();
@@ -148,8 +156,10 @@ public class CommandBuilder implements Serializable, Cloneable {
     }
 
     public CommandBuilder add(CommandBuilder cmds) {
-        if (cmds!=null)
+        if (cmds!=null) {
             addAll(cmds.args);
+            env.putAll(cmds.env);
+        }
         return this;
     }
 
@@ -219,6 +229,7 @@ public class CommandBuilder implements Serializable, Cloneable {
     public CommandBuilder clone() {
         CommandBuilder r = new CommandBuilder();
         r.args.addAll(this.args);
+        r.env.putAll(env);
         return r;
     }
 
@@ -227,6 +238,7 @@ public class CommandBuilder implements Serializable, Cloneable {
      */
     public void clear() {
         args.clear();
+        env.clear();
     }
 
     public List<String> toList() {
@@ -329,12 +341,23 @@ public class CommandBuilder implements Serializable, Cloneable {
     /**
      * Debug/error message friendly output.
      */
+    @Override
     public String toString() {
         StringBuilder buf = new StringBuilder();
+        for (Entry<String, String> envvar: env.entrySet()) {
+            buf.append(envvar.getKey()).append('=');
+            if(envvar.getValue().indexOf(' ')>=0)
+                buf.append('"').append(envvar.getValue()).append('"');
+            else
+                buf.append(envvar.getValue());
+
+            buf.append(' ');
+        }
+
         for (int i=0; i<args.size(); i++) {
             String arg = args.get(i);
 
-            if(buf.length()>0)  buf.append(' ');
+            if(i>0) buf.append(' ');
 
             if(arg.indexOf(' ')>=0 || arg.length()==0)
                 buf.append('"').append(arg).append('"');
@@ -352,6 +375,7 @@ public class CommandBuilder implements Serializable, Cloneable {
         CommandBuilder that = (CommandBuilder) o;
 
         if (!args.equals(that.args)) return false;
+        if (!env.equals(that.env)) return false;
         if (pwd != null ? !pwd.equals(that.pwd) : that.pwd != null) return false;
 
         return true;
@@ -360,6 +384,7 @@ public class CommandBuilder implements Serializable, Cloneable {
     @Override
     public int hashCode() {
         int result = args.hashCode();
+        result = 31 * env.hashCode();
         result = 31 * result + (pwd != null ? pwd.hashCode() : 0);
         return result;
     }
