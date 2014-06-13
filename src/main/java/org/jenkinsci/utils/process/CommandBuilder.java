@@ -230,6 +230,7 @@ public class CommandBuilder implements Serializable, Cloneable {
         CommandBuilder r = new CommandBuilder();
         r.args.addAll(this.args);
         r.env.putAll(env);
+        r.pwd = pwd;
         return r;
     }
 
