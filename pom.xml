@@ -8,7 +8,7 @@
   </parent>
 
   <artifactId>process-utils</artifactId>
-  <version>1.3-SNAPSHOT</version>
+  <version>1.3</version>
   <name>Process forking utilities for Java7+</name>
 
   <build>
