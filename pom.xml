@@ -11,6 +11,24 @@
   <version>1.4-SNAPSHOT</version>
   <name>Process forking utilities for Java7+</name>
 
+  <!-- Note that the 'repositories' and 'pluginRepositories' blocks below are actually copy-pasted
+       from the Jenkins org pom. This is on purpose to keep jenkins core buildable even if one has
+       *not* defined the specific details in the settings.xml file. -->
+  <repositories>
+    <repository>
+      <id>repo.jenkins-ci.org</id>
+      <url>http://repo.jenkins-ci.org/public/</url>
+      <!-- allow snapshots -->
+    </repository>
+  </repositories>
+
+  <pluginRepositories>
+    <pluginRepository>
+      <id>repo.jenkins-ci.org</id>
+      <url>http://repo.jenkins-ci.org/public/</url>
+    </pluginRepository>
+  </pluginRepositories>
+
   <build>
     <plugins>
       <plugin>
