@@ -1,22 +1,18 @@
 package org.jenkinsci.utils.process;
 
-import java.lang.reflect.Field;
-
 /**
  * @author Kohsuke Kawaguchi
  */
-@SuppressWarnings("Since15")
 public class ProcessUtils {
     /**
      * Figure out the UNIX process ID from {@link Process}
      */
-    public static int getPid(Process p) {
+    public static long getPid(Process p) {
         try {
-            Field f = p.getClass().getDeclaredField("pid");
-            f.setAccessible(true);
-            return (int)f.get(p);
-        } catch (ReflectiveOperationException e) {
-            return -1;
+            ProcessHandle handle = p.toHandle();
+            return handle.pid();
+        } catch (UnsupportedOperationException e1) {
+            return -1L;
         }
     }
 }
