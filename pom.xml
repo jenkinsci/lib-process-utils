@@ -10,7 +10,7 @@
 
   <artifactId>process-utils</artifactId>
   <version>${revision}${changelist}</version>
-  <name>Process forking utilities for Java7+</name>
+  <name>Process forking utilities for Java9+</name>
   <url>https://github.com/jenkinsci/lib-${project.artifactId}</url>
 
   <licenses>
