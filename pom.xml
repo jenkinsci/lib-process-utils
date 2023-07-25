@@ -4,66 +4,61 @@
   <parent>
     <groupId>org.jenkins-ci</groupId>
     <artifactId>jenkins</artifactId>
-    <version>1.32</version>
+    <version>1.103</version>
+    <relativePath />
   </parent>
 
   <artifactId>process-utils</artifactId>
-  <version>1.4-SNAPSHOT</version>
+  <version>${revision}${changelist}</version>
   <name>Process forking utilities for Java9+</name>
+  <url>https://github.com/jenkinsci/lib-${project.artifactId}</url>
 
-  <!-- Note that the 'repositories' and 'pluginRepositories' blocks below are actually copy-pasted
-       from the Jenkins org pom. This is on purpose to keep jenkins core buildable even if one has
-       *not* defined the specific details in the settings.xml file. -->
+  <licenses>
+    <license>
+      <name>MIT License</name>
+      <url>https://opensource.org/licenses/MIT</url>
+    </license>
+  </licenses>
+
+  <scm>
+    <connection>scm:git:https://github.com/${gitHubRepo}.git</connection>
+    <developerConnection>scm:git:git@github.com:${gitHubRepo}.git</developerConnection>
+    <tag>${scmTag}</tag>
+    <url>https://github.com/${gitHubRepo}</url>
+  </scm>
+
+  <properties>
+    <revision>1.4</revision>
+    <changelist>-SNAPSHOT</changelist>
+    <gitHubRepo>jenkinsci/lib-${project.artifactId}</gitHubRepo>
+    <!-- TODO fix existing violations -->
+    <spotbugs.threshold>High</spotbugs.threshold>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>commons-io</groupId>
+      <artifactId>commons-io</artifactId>
+      <version>2.4</version>
+    </dependency>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
   <repositories>
     <repository>
       <id>repo.jenkins-ci.org</id>
-      <url>http://repo.jenkins-ci.org/public/</url>
-      <!-- allow snapshots -->
+      <url>https://repo.jenkins-ci.org/public/</url>
     </repository>
   </repositories>
 
   <pluginRepositories>
     <pluginRepository>
       <id>repo.jenkins-ci.org</id>
-      <url>http://repo.jenkins-ci.org/public/</url>
+      <url>https://repo.jenkins-ci.org/public/</url>
     </pluginRepository>
   </pluginRepositories>
-
-  <build>
-    <plugins>
-      <plugin>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <configuration>
-          <source>1.9</source>
-          <target>1.9</target>
-        </configuration>
-      </plugin>
-    </plugins>
-  </build>
-
-  <dependencies>
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>4.11</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>commons-io</groupId>
-      <artifactId>commons-io</artifactId>
-      <version>2.4</version>
-    </dependency>
-  </dependencies>
-
-  <scm>
-    <connection>scm:git:git://github.com/jenkinsci/lib-${project.artifactId}.git</connection>
-    <developerConnection>scm:git:git@github.com:jenkinsci/lib-${project.artifactId}.git</developerConnection>
-  </scm>
-
-  <licenses>
-    <license>
-      <name>MIT License</name>
-      <url>http://jenkins-ci.org/mit-license</url>
-    </license>
-  </licenses>
 </project>
