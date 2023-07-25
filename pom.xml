@@ -33,6 +33,7 @@
     <gitHubRepo>jenkinsci/lib-${project.artifactId}</gitHubRepo>
     <!-- TODO fix existing violations -->
     <spotbugs.threshold>High</spotbugs.threshold>
+    <spotless.check.skip>false</spotless.check.skip>
   </properties>
 
   <dependencies>

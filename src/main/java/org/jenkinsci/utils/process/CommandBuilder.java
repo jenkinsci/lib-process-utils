@@ -36,12 +36,11 @@ import java.util.logging.Logger;
  */
 public class CommandBuilder implements Serializable, Cloneable {
     private final List<String> args = new ArrayList<String>();
-    public final Map<String,String> env = new HashMap<>();
+    public final Map<String, String> env = new HashMap<>();
 
     private File pwd;
 
-    public CommandBuilder() {
-    }
+    public CommandBuilder() {}
 
     public CommandBuilder(Collection<String> args) {
         addAll(args);
@@ -107,7 +106,7 @@ public class CommandBuilder implements Serializable, Cloneable {
     }
 
     public CommandBuilder add(String a) {
-        if(a!=null) {
+        if (a != null) {
             args.add(a);
         }
         return this;
@@ -127,18 +126,18 @@ public class CommandBuilder implements Serializable, Cloneable {
      * argument is treated as its own string and never merged into one.
      */
     public CommandBuilder addQuoted(String a) {
-        return add('"'+a+'"');
+        return add('"' + a + '"');
     }
 
     /**
      * @since 1.378
      */
     public CommandBuilder addQuoted(String a, boolean mask) {
-        return add('"'+a+'"');
+        return add('"' + a + '"');
     }
 
     public CommandBuilder add(Object... args) {
-        if (args!=null) {
+        if (args != null) {
             for (Object arg : args) {
                 add(arg);
             }
@@ -147,7 +146,7 @@ public class CommandBuilder implements Serializable, Cloneable {
     }
 
     public CommandBuilder add(String... args) {
-        if (args!=null) {
+        if (args != null) {
             for (String arg : args) {
                 add(arg);
             }
@@ -156,7 +155,7 @@ public class CommandBuilder implements Serializable, Cloneable {
     }
 
     public CommandBuilder add(CommandBuilder cmds) {
-        if (cmds!=null) {
+        if (cmds != null) {
             addAll(cmds.args);
             env.putAll(cmds.env);
         }
@@ -164,7 +163,7 @@ public class CommandBuilder implements Serializable, Cloneable {
     }
 
     public CommandBuilder addAll(Collection<String> args) {
-        if (args!=null) {
+        if (args != null) {
             for (String arg : args) {
                 add(arg);
             }
@@ -172,21 +171,23 @@ public class CommandBuilder implements Serializable, Cloneable {
         return this;
     }
 
-//    /**
-//     * Decomposes the given token into multiple arguments by splitting via whitespace.
-//     */
-//    public CommandBuilder addTokenized(String s) {
-//        if(s==null) return this;
-//        add(Util.tokenize(s));
-//        return this;
-//    }
+    //    /**
+    //     * Decomposes the given token into multiple arguments by splitting via whitespace.
+    //     */
+    //    public CommandBuilder addTokenized(String s) {
+    //        if(s==null) return this;
+    //        add(Util.tokenize(s));
+    //        return this;
+    //    }
 
     /**
      * @since 1.378
      */
     public CommandBuilder addKeyValuePair(String prefix, String key, String value) {
-        if(key==null) return this;
-        add(((prefix==null)?"-D":prefix)+key+'='+value);
+        if (key == null) {
+            return this;
+        }
+        add(((prefix == null) ? "-D" : prefix) + key + '=' + value);
         return this;
     }
 
@@ -196,9 +197,10 @@ public class CommandBuilder implements Serializable, Cloneable {
      * {@code -D} portion is configurable as the 'prefix' parameter.
      * @since 1.114
      */
-    public CommandBuilder addKeyValuePairs(String prefix, Map<String,String> props) {
-        for (Entry<String,String> e : props.entrySet())
+    public CommandBuilder addKeyValuePairs(String prefix, Map<String, String> props) {
+        for (Entry<String, String> e : props.entrySet()) {
             addKeyValuePair(prefix, e.getKey(), e.getValue());
+        }
         return this;
     }
 
@@ -214,8 +216,8 @@ public class CommandBuilder implements Serializable, Cloneable {
      *      names that do not exist in the set will be added unmasked.
      * @since 1.378
      */
-    public CommandBuilder addKeyValuePairs(String prefix, Map<String,String> props, Set<String> propsToMask) {
-        for (Entry<String,String> e : props.entrySet()) {
+    public CommandBuilder addKeyValuePairs(String prefix, Map<String, String> props, Set<String> propsToMask) {
+        for (Entry<String, String> e : props.entrySet()) {
             addKeyValuePair(prefix, e.getKey(), e.getValue());
         }
         return this;
@@ -253,12 +255,15 @@ public class CommandBuilder implements Serializable, Cloneable {
     public String toStringWithQuote() {
         StringBuilder buf = new StringBuilder();
         for (String arg : args) {
-            if(buf.length()>0)  buf.append(' ');
+            if (buf.length() > 0) {
+                buf.append(' ');
+            }
 
-            if(arg.indexOf(' ')>=0 || arg.length()==0)
+            if (arg.indexOf(' ') >= 0 || arg.length() == 0) {
                 buf.append('"').append(arg).append('"');
-            else
+            } else {
                 buf.append(arg);
+            }
         }
         return buf.toString();
     }
@@ -296,25 +301,33 @@ public class CommandBuilder implements Serializable, Cloneable {
                 char c = arg.charAt(i);
                 if (!quoted && (c == ' ' || c == '*' || c == '?' || c == ',' || c == ';')) {
                     quoted = startQuoting(quotedArgs, arg, i);
-                }
-                else if (c == '^' || c == '&' || c == '<' || c == '>' || c == '|') {
-                    if (!quoted) quoted = startQuoting(quotedArgs, arg, i);
-                    // quotedArgs.append('^'); See note in javadoc above
-                }
-                else if (c == '"') {
-                    if (!quoted) quoted = startQuoting(quotedArgs, arg, i);
+                } else if (c == '^' || c == '&' || c == '<' || c == '>' || c == '|') {
+                    if (!quoted) {
+                        quoted = startQuoting(quotedArgs, arg, i);
+                        // quotedArgs.append('^'); See note in javadoc above
+                    }
+                } else if (c == '"') {
+                    if (!quoted) {
+                        quoted = startQuoting(quotedArgs, arg, i);
+                    }
                     quotedArgs.append('"');
-                }
-                else if (percent && escapeVars
-                         && ((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z'))) {
-                    if (!quoted) quoted = startQuoting(quotedArgs, arg, i);
+                } else if (percent && escapeVars && ((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z'))) {
+                    if (!quoted) {
+                        quoted = startQuoting(quotedArgs, arg, i);
+                    }
                     quotedArgs.append('"').append(c);
                     c = '"';
                 }
                 percent = (c == '%');
-                if (quoted) quotedArgs.append(c);
+                if (quoted) {
+                    quotedArgs.append(c);
+                }
             }
-            if (quoted) quotedArgs.append('"'); else quotedArgs.append(arg);
+            if (quoted) {
+                quotedArgs.append('"');
+            } else {
+                quotedArgs.append(arg);
+            }
             quotedArgs.append(' ');
         }
         // (comment copied from old code in hudson.tasks.Ant)
@@ -345,39 +358,53 @@ public class CommandBuilder implements Serializable, Cloneable {
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder();
-        for (Entry<String, String> envvar: env.entrySet()) {
+        for (Entry<String, String> envvar : env.entrySet()) {
             buf.append(envvar.getKey()).append('=');
-            if(envvar.getValue().indexOf(' ')>=0)
+            if (envvar.getValue().indexOf(' ') >= 0) {
                 buf.append('"').append(envvar.getValue()).append('"');
-            else
+            } else {
                 buf.append(envvar.getValue());
+            }
 
             buf.append(' ');
         }
 
-        for (int i=0; i<args.size(); i++) {
+        for (int i = 0; i < args.size(); i++) {
             String arg = args.get(i);
 
-            if(i>0) buf.append(' ');
+            if (i > 0) {
+                buf.append(' ');
+            }
 
-            if(arg.indexOf(' ')>=0 || arg.length()==0)
+            if (arg.indexOf(' ') >= 0 || arg.length() == 0) {
                 buf.append('"').append(arg).append('"');
-            else
+            } else {
                 buf.append(arg);
+            }
         }
         return buf.toString();
     }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
         CommandBuilder that = (CommandBuilder) o;
 
-        if (!args.equals(that.args)) return false;
-        if (!env.equals(that.env)) return false;
-        if (pwd != null ? !pwd.equals(that.pwd) : that.pwd != null) return false;
+        if (!args.equals(that.args)) {
+            return false;
+        }
+        if (!env.equals(that.env)) {
+            return false;
+        }
+        if (pwd != null ? !pwd.equals(that.pwd) : that.pwd != null) {
+            return false;
+        }
 
         return true;
     }
@@ -392,5 +419,4 @@ public class CommandBuilder implements Serializable, Cloneable {
 
     private static final long serialVersionUID = 1L;
     private static final Logger LOGGER = Logger.getLogger(CommandBuilder.class.getName());
-
 }
