@@ -193,7 +193,7 @@ public class CommandBuilder implements Serializable, Cloneable {
     /**
      * Adds key value pairs as "-Dkey=value -Dkey=value ..."
      *
-     * <tt>-D</tt> portion is configurable as the 'prefix' parameter.
+     * {@code -D} portion is configurable as the 'prefix' parameter.
      * @since 1.114
      */
     public CommandBuilder addKeyValuePairs(String prefix, Map<String,String> props) {
@@ -269,19 +269,19 @@ public class CommandBuilder implements Serializable, Cloneable {
      * is needed since the command is now passed as a string to the CMD.EXE shell.
      * This is done as follows:
      * Wrap arguments in double quotes if they contain any of:
-     *   space *?,;^&<>|"
+     *   space *?,;^&amp;&lt;&gt;|"
      *   and if escapeVars is true, % followed by a letter.
-     * <br/> When testing from command prompt, these characters also need to be
-     * prepended with a ^ character: ^&<>|  -- however, invoking cmd.exe from
+     * <br> When testing from command prompt, these characters also need to be
+     * prepended with a ^ character: ^&amp;&lt;&gt;|  -- however, invoking cmd.exe from
      * Jenkins does not seem to require this extra escaping so it is not added by
      * this method.
-     * <br/> A " is prepended with another " character.  Note: Windows has issues
+     * <br> A " is prepended with another " character.  Note: Windows has issues
      * escaping some combinations of quotes and spaces.  Quotes should be avoided.
-     * <br/> If escapeVars is true, a % followed by a letter has that letter wrapped
+     * <br> If escapeVars is true, a % followed by a letter has that letter wrapped
      * in double quotes, to avoid possible variable expansion.
      * ie, %foo% becomes "%"f"oo%".  The second % does not need special handling
-     * because it is not followed by a letter. <br/>
-     * Example: "-Dfoo=*abc?def;ghi^jkl&mno<pqr>stu|vwx""yz%"e"nd"
+     * because it is not followed by a letter. <br>
+     * Example: "-Dfoo=*abc?def;ghi^jkl&amp;mno&lt;pqr&gt;stu|vwx""yz%"e"nd"
      * @param escapeVars True to escape %VAR% references; false to leave these alone
      *                   so they may be expanded when the command is run
      * @return new CommandBuilder that runs given command through cmd.exe /C
