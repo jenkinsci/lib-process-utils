@@ -1,8 +1,10 @@
 package org.jenkinsci.utils.process;
 
+import java.io.FilterInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InterruptedIOException;
 import org.apache.commons.io.IOUtils;
-
-import java.io.*;
 
 /**
  * Represents a reader end of the pipe to a running process.
@@ -44,14 +46,14 @@ public class ProcessInputStream extends InputStream {
         return base.read(b, off, len);
     }
 
-    public InputStream getInputStream(){
+    public InputStream getInputStream() {
         return base;
     }
 
     /**
      * Gives underlying {@link Process}
      */
-    public Process getProcess(){
+    public Process getProcess() {
         return process;
     }
 
@@ -82,7 +84,7 @@ public class ProcessInputStream extends InputStream {
      */
     public String asText() throws IOException, InterruptedException {
         String r = IOUtils.toString(this);
-        waitFor();  // collect the finished child process
+        waitFor(); // collect the finished child process
         return r;
     }
 
@@ -92,8 +94,10 @@ public class ProcessInputStream extends InputStream {
      */
     public String verifyOrDieWith(String errorMessage) throws IOException, InterruptedException {
         String text = asText();
-        if (waitFor()==0)   return text;
-        throw new IOException(errorMessage+"\n"+text);
+        if (waitFor() == 0) {
+            return text;
+        }
+        throw new IOException(errorMessage + "\n" + text);
     }
 
     /**
@@ -118,16 +122,18 @@ public class ProcessInputStream extends InputStream {
             }
 
             private int check(int r) throws IOException {
-                if (r<0) {
+                if (r < 0) {
                     try {
                         int x = waitFor();
-                        if (x !=0) {
+                        if (x != 0) {
                             String n = displayName;
-                            if (n==null)    n=process.toString();
-                            throw new IOException("Process '"+n+"' terminated with exit code="+x);
+                            if (n == null) {
+                                n = process.toString();
+                            }
+                            throw new IOException("Process '" + n + "' terminated with exit code=" + x);
                         }
                     } catch (InterruptedException e) {
-                        throw (IOException)new InterruptedIOException().initCause(e);
+                        throw (IOException) new InterruptedIOException().initCause(e);
                     }
                 }
                 return r;

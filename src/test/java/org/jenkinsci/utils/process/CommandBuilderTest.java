@@ -28,7 +28,6 @@ import static org.junit.Assert.assertEquals;
 import java.io.File;
 import java.util.Arrays;
 import java.util.HashMap;
-
 import org.junit.Test;
 
 public class CommandBuilderTest {
