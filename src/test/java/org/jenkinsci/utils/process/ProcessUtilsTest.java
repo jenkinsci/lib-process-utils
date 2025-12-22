@@ -1,19 +1,19 @@
 package org.jenkinsci.utils.process;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 import java.io.IOException;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class ProcessUtilsTest {
+class ProcessUtilsTest {
 
     @Test
-    public void testToString() throws IOException, InterruptedException {
+    void testToString() throws IOException, InterruptedException {
         ProcessBuilder pb = new ProcessBuilder("java", "-version");
         Process process = pb.start();
         long pid = ProcessUtils.getPid(process);
         assertNotEquals(-1, pid);
-        assertEquals("Process " + pid + " failed to terminate at the end of the test", 0, process.waitFor());
+        assertEquals(0, process.waitFor(), "Process " + pid + " failed to terminate at the end of the test");
     }
 }

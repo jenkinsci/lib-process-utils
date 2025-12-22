@@ -23,22 +23,22 @@
  */
 package org.jenkinsci.utils.process;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.File;
 import java.util.Arrays;
 import java.util.HashMap;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class CommandBuilderTest {
+class CommandBuilderTest {
 
     @Test
-    public void testToString() {
+    void testToString() {
         assertEquals("JAVA_OPTS=\"a value\" java -jar a.jar", builder().toString());
     }
 
     @Test
-    public void testAdd() {
+    void testAdd() {
         CommandBuilder cb = new CommandBuilder().add("some", "more", "args");
         cb.env.put("OTHER_OPTS", "42");
 
@@ -52,7 +52,7 @@ public class CommandBuilderTest {
     }
 
     @Test
-    public void testClone() {
+    void testClone() {
         CommandBuilder b = builder();
         CommandBuilder clone = b.clone();
         assertEquals(b, clone);
